@@ -62,25 +62,26 @@ int main(void)
                    UART_transmitData(EUSCI_A0_BASE,rChar);
                    finished=charFSM(rChar);
                    }
+   // TODO: If the FSM indicates a successful string entry, transmit the response string
+     //       Check the transmit interrupt flag prior to transmitting each character and moving on to the next one
+     //       Make sure to reset the success variable after transmission.
+
                if(finished)
                {
-                 unsigned  int i=1;
+
+                unsigned  int i=1;
                 while(response[i]!='\0')
                {
-                    UART_transmitData(EUSCI_A0_BASE,response[i]);
-                    i++;
+                    if (UART_getInterruptStatus (EUSCI_A0_BASE, EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG)== EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG)
+                    {
+                        UART_transmitData(EUSCI_A0_BASE,response[i]);
+                        i++;
+                    }
                 }
              }
            }
-
-
-        // TODO: If the FSM indicates a successful string entry, transmit the response string.
-        //       Check the transmit interrupt flag prior to transmitting each character and moving on to the next one.
-        //       Make sure to reset the success variable after transmission.
-
-
     }
-    }
+ }
  void initBoard()
  {
     WDT_A_hold(WDT_A_BASE);
