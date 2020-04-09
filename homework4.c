@@ -69,7 +69,7 @@ int main(void)
                if(finished)
                {
 
-                unsigned  int i=1;
+                unsigned  int i=0;
                 while(response[i]!='\0')
                {
                     if (UART_getInterruptStatus (EUSCI_A0_BASE, EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG)== EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG)
@@ -93,17 +93,21 @@ bool charFSM(char rChar)
  switch (button)
        {
          case s0:
-                 if(rChar=='2')
-                 {
+                 if(rChar=='2'){
                      button=s1;
-
+                 }
+                 else{
+                     button=s0;
                  }
                    break;
          case s1:
                if(rChar=='5')
                {
                   button=s2;
-
+               }
+               else if (rChar=='2')
+               {
+                   button=s1;
                }
                else
                {
